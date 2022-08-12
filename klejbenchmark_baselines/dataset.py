@@ -5,7 +5,6 @@ from functools import partial
 
 import pandas as pd
 import torch
-from sklearn.base import BaseEstimator
 from sklearn.preprocessing import FunctionTransformer, LabelEncoder
 from torch.utils.data.dataloader import DataLoader
 from torch.utils.data.dataset import Dataset
@@ -19,27 +18,29 @@ Batch = t.Dict[str, torch.Tensor]
 class Datasets:
 
     def __init__(self, task: BaseTask):
-        tokenizer = AutoTokenizer.from_pretrained(
+        self.tokenizer = AutoTokenizer.from_pretrained(
             pretrained_model_name_or_path=task.config.tokenizer_name_or_path,
             do_lower_case=task.config.do_lower_case,
         )
+        self.tokenizer.pad_token = self.tokenizer.eos_token
+        self.tokenizer.pad_token_id = str(self.tokenizer.eos_token_id)
 
         self.train_ds = KlejDataset(
             split='train',
             task=task,
-            text_encoder=tokenizer,
+            text_encoder=self.tokenizer,
             target_encoder=None,
         )
         self.valid_ds = KlejDataset(
             split='valid',
             task=task,
-            text_encoder=tokenizer,
+            text_encoder=self.tokenizer,
             target_encoder=self.train_ds.target_encoder,
         )
         self.test_ds = KlejDataset(
             split='test',
             task=task,
-            text_encoder=tokenizer,
+            text_encoder=self.tokenizer,
             target_encoder=self.train_ds.target_encoder,
         )
 
@@ -47,7 +48,7 @@ class Datasets:
 class KlejDataset(Dataset):
 
     def __init__(self, split: str, task: BaseTask, text_encoder: PreTrainedTokenizer,
-                 target_encoder: t.Optional[BaseEstimator]):
+                 target_encoder):
 
         # config
         self.split = split

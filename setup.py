@@ -16,7 +16,7 @@ setup(
     long_description_content_type='text/markdown',
     license='Apache 2 License',
     url='https://github.com/allegro/klejbenchmark-baselines',
-    python_requires='>=3.6.0',
-    install_requires=REQUIRES,
+    # python_requires='>=3.6.0',
+    # install_requires=REQUIRES,
     packages=find_packages(),
 )

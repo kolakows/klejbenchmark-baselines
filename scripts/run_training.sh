@@ -6,8 +6,8 @@ IFS=$'\n\t'
 RUN_ID_PREFIX="klej_herbert"
 DATA_PATH="klej_data"
 OUTPUT_PATH="output"
-TOKENIZER_NAME_OR_PATH="allegro/herbert-klej-cased-tokenizer-v1"  # local path or the name of the transformers tokenizer
-MODEL_NAME_OR_PATH="allegro/herbert-klej-cased-v1"  # local path or the name of the transformers model
+TOKENIZER_NAME_OR_PATH="flax-community/papuGaPT2"  # local path or the name of the transformers tokenizer
+MODEL_NAME_OR_PATH="flax-community/papuGaPT2"  # local path or the name of the transformers model
 
 task_names=("nkjp-ner" "cdsc-e" "cdsc-r" "cbd" "polemo2.0-in" "polemo2.0-out" "dyk" "psc" "ar")
 run_date="$(date +%Y%m%d_%H%M%S)"
@@ -32,7 +32,7 @@ for task_name in "${task_names[@]}"; do
     fi
 
     # Run task training
-    python klejbenchmark_baselines/main.py \
+    echo python klejbenchmark_baselines/main.py \
       --run-id "${run_id}" \
       --task-name "${task_name}" \
       --task-path "${task_path}/" \

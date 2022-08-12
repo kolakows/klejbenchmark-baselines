@@ -34,6 +34,7 @@ class KlejTransformer(pl.LightningModule):
             pretrained_model_name_or_path=self.task.config.model_name_or_path,
             num_labels=num_labels,
         )
+        self.config.pad_token_id = self.datasets.tokenizer.pad_token_id
         self.model = AutoModelForSequenceClassification.from_pretrained(
             pretrained_model_name_or_path=self.task.config.model_name_or_path,
             config=self.config,
